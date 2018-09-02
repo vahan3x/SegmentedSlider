@@ -11,6 +11,7 @@ import os.log
 
 /// A control to select a single value from continuous range of values.
 /// Designed to display the range as a sequence of sections divided into segments.
+/// - BUG: `UIControl`'s tracking behaviour is currently not working.
 @IBDesignable public class SegmentedSlider: UIControl {
     
     // MARK: - Variables
@@ -69,10 +70,8 @@ import os.log
     /// - Note: Values less then `1.0` will be ignored.
     @IBInspectable public var separatorLineWidth: CGFloat = 2.0 {
         didSet {
-            guard separatorLineWidth >= 1.0 else {
-                separatorLineWidth = 1.0
-                return
-            }
+            if separatorLineWidth < 1.0 { separatorLineWidth = 1.0 }
+            
             guard separatorLineHeightDifference >= -separatorLineWidth else {
                 separatorLineHeightDifference = -separatorLineWidth // The setter will call `updateAppearance()`
                 return
@@ -88,10 +87,7 @@ import os.log
     /// - Note: Values less then `-separatorLineWidth` will be ignored.
     @IBInspectable public var separatorLineHeightDifference: CGFloat = 0.0 {
         didSet {
-            guard separatorLineHeightDifference >= -separatorLineWidth else {
-                separatorLineHeightDifference = -separatorLineWidth
-                return
-            }
+            if separatorLineHeightDifference < -separatorLineWidth { separatorLineHeightDifference = -separatorLineWidth }
             
             updateAppearance()
         }
@@ -105,6 +101,7 @@ import os.log
     private var indicatorLayer = CALayer()
     
     private var separatorLineSpaceWidth: CGFloat = 4.0
+    private var wasLastTouchInside = true
     
     /// By some reasons after `layoutSubviews()` is called, `contentView`'s size is still undefined, so I moved the
     /// content size-dependent code here.
@@ -155,6 +152,7 @@ import os.log
         contentView.layer.addSublayer(replicatorLayer)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
+        scrollView.panGestureRecognizer.addTarget(self, action: #selector(scrollViewPanAction(_:)))
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.alwaysBounceHorizontal = true
@@ -288,6 +286,35 @@ import os.log
     
     public override func cancelTracking(with event: UIEvent?) {
         super.cancelTracking(with: event)
+    }
+    
+    // MARK: Actions
+    
+    @objc private func scrollViewPanAction(_ sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            sendActions(for: [.touchDown])
+            wasLastTouchInside = true
+        case .changed:
+            switch (self.bounds.contains(sender.location(in: self)), wasLastTouchInside) {
+            case (false, false): sendActions(for: [.touchDragOutside])
+            case (true, false):
+                sendActions(for: [.touchDragEnter])
+                wasLastTouchInside = true
+            case (false, true):
+                sendActions(for: [.touchDragExit])
+                wasLastTouchInside = false
+            case (true, true): sendActions(for: [.touchDragInside])
+            }
+        case .ended:
+            if self.bounds.contains(sender.location(in: self)) {
+                sendActions(for: [.touchUpInside])
+            } else {
+                sendActions(for: [.touchUpOutside])
+            }
+        case .cancelled: sendActions(for: [.touchCancel])
+        default: break
+        }
     }
 }
 
