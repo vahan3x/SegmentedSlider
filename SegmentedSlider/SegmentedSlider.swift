@@ -37,8 +37,8 @@ import os.log
 
             let offset = CGPoint(x: -scrollView.contentInset.left + (valueProgress * scrollView.contentSize.width), y: 0.0)
             
-            os_log("Setting: %@", type: .debug, "\(offset)")
-                        
+//            os_log("Setting: %@", type: .debug, "\(offset)")
+            
             performWithoutUpdatingValue { scrollView.contentOffset = offset }
         }
     }
@@ -152,7 +152,7 @@ import os.log
         
         let offset = CGPoint(x: -scrollView.contentInset.left + (gelf.valueProgress * scrollView.contentSize.width), y: 0.0)
         
-        os_log("Setting: %@", type: .debug, "\(offset)")
+//        os_log("Setting: %@", type: .debug, "\(offset)")
         gelf.performWithoutUpdatingValue { scrollView.contentOffset = offset }
     }
     
@@ -358,9 +358,9 @@ import os.log
 private typealias ScrollDelegate = SegmentedSlider
 extension ScrollDelegate: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        os_log("Setted: %@", type: .debug, "\(scrollView.contentOffset)") // BUG: the value doesn't match with the setted one.
+//        os_log("Setted: %@", type: .debug, "\(scrollView.contentOffset)") // BUG: the value doesn't match with the setted one.
         let progress = Double((scrollView.contentOffset.x + scrollView.contentInset.left) / scrollView.contentSize.width)
-        os_log("Progress: %@", type: .debug, "\(progress)")
+//        os_log("Progress: %@", type: .debug, "\(progress)")
         
         guard shouldUpdateValue else { return }
         
