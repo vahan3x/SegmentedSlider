@@ -12,18 +12,18 @@
 		26D2F798213AA17C00B0EFA9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26D2F796213AA17C00B0EFA9 /* Main.storyboard */; };
 		26D2F79A213AA17F00B0EFA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26D2F799213AA17F00B0EFA9 /* Assets.xcassets */; };
 		26D2F79D213AA17F00B0EFA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26D2F79B213AA17F00B0EFA9 /* LaunchScreen.storyboard */; };
-		26D2F7A8213ABC7800B0EFA9 /* SegmentedSlider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26D2F7A5213AA1E600B0EFA9 /* SegmentedSlider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		26D2F7AB213C029500B0EFA9 /* SegmentedSlider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D2F7AA213C029500B0EFA9 /* SegmentedSlider.framework */; };
+		26DABA0E213C4F5D00DA16B4 /* SegmentedSlider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DABA0C213C4F3000DA16B4 /* SegmentedSlider.framework */; };
+		26DABA0F213C4F5D00DA16B4 /* SegmentedSlider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26DABA0C213C4F3000DA16B4 /* SegmentedSlider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		26D2F7A9213ABC7800B0EFA9 /* Embed Frameworks */ = {
+		26DABA0B213C4F2B00DA16B4 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				26D2F7A8213ABC7800B0EFA9 /* SegmentedSlider.framework in Embed Frameworks */,
+				26DABA0F213C4F5D00DA16B4 /* SegmentedSlider.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,10 +38,9 @@
 		26D2F799213AA17F00B0EFA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26D2F79C213AA17F00B0EFA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		26D2F79E213AA17F00B0EFA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		26D2F7A5213AA1E600B0EFA9 /* SegmentedSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SegmentedSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		26D2F7AA213C029500B0EFA9 /* SegmentedSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SegmentedSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26D2F7AE213C21EA00B0EFA9 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		26D2F7AF213C21EB00B0EFA9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		26DABA0C213C4F3000DA16B4 /* SegmentedSlider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SegmentedSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26D2F7AB213C029500B0EFA9 /* SegmentedSlider.framework in Frameworks */,
+				26DABA0E213C4F5D00DA16B4 /* SegmentedSlider.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,8 +90,7 @@
 		26D2F7A4213AA1E600B0EFA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				26D2F7AA213C029500B0EFA9 /* SegmentedSlider.framework */,
-				26D2F7A5213AA1E600B0EFA9 /* SegmentedSlider.framework */,
+				26DABA0C213C4F3000DA16B4 /* SegmentedSlider.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -107,7 +105,7 @@
 				26D2F78B213AA17C00B0EFA9 /* Sources */,
 				26D2F78C213AA17C00B0EFA9 /* Frameworks */,
 				26D2F78D213AA17C00B0EFA9 /* Resources */,
-				26D2F7A9213ABC7800B0EFA9 /* Embed Frameworks */,
+				26DABA0B213C4F2B00DA16B4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

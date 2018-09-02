@@ -14,18 +14,23 @@ class ViewController: UIViewController {
     // MARK: - Variables
     
     @IBOutlet private weak var segmentedSlider: SegmentedSlider!
+    @IBOutlet private weak var stepper: UIStepper!
     
     // MARK: - Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     // MARK: Actions
     
     @IBAction private func stepperAction(_ sender: UIStepper) {
         segmentedSlider.value = sender.value
+    }
+    
+    @IBAction func sliderAction(_ sender: SegmentedSlider) {
+        stepper.value = sender.value
+        print("Slider Value changed: \(sender.value)")
     }
 }
 

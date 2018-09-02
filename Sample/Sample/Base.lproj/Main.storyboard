@@ -38,6 +38,9 @@
                                         <integer key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="sliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Riz-vp-erp"/>
+                                </connections>
                             </view>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" maximumValue="1" stepValue="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="6jK-LZ-fa7">
                                 <rect key="frame" x="16" y="600" width="94" height="29"/>
@@ -46,7 +49,7 @@
                                 </connections>
                             </stepper>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="gCp-dk-m7j" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="BQK-OC-eQr"/>
                             <constraint firstItem="gCp-dk-m7j" firstAttribute="top" secondItem="6jK-LZ-fa7" secondAttribute="bottom" constant="8" id="PLi-kH-Wze"/>
@@ -58,6 +61,7 @@
                     </view>
                     <connections>
                         <outlet property="segmentedSlider" destination="gCp-dk-m7j" id="w0P-mb-N86"/>
+                        <outlet property="stepper" destination="6jK-LZ-fa7" id="lfP-0B-T1o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

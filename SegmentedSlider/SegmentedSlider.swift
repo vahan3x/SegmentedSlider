@@ -23,31 +23,61 @@ import os.log
     /// - Note: If you try to set a value that is beyond the slider's acceptable range, it'll be clamped
     /// into it.
     /// - Note: The value may change if you'll change `minimumValue` or `maximumValue`.
-    @IBInspectable public var value: Double = 0.5 {
-        didSet {
+    @IBInspectable public var value: Double {
+        get { return actualValue }
+        set {
+            var value = newValue
             if !((minimumValue ... maximumValue) ~= value) {
                 value = min(maximumValue, max(value, minimumValue))
             }
+            
+            guard value != actualValue else { return }
+            
+            actualValue = value
+
             let offset = CGPoint(x: -scrollView.contentInset.left + (valueProgress * scrollView.contentSize.width), y: 0.0)
             
             os_log("Setting: %@", type: .debug, "\(offset)")
-            scrollView.contentOffset = offset
+                        
+            performWithoutUpdatingValue { scrollView.contentOffset = offset }
         }
     }
     
-    private var valueProgress: CGFloat { return CGFloat(value / (maximumValue - minimumValue)) }
+    private var actualValue: Double = 0.5
+    
+    private var valueProgress: CGFloat { return CGFloat(actualValue / (maximumValue - minimumValue)) }
     
     /// The lower bound of the slider's range. Default is `0.0`.
     ///
     /// Use this property to get and set the slider's acceptable range's lower bound.
     /// - Note: The value may change if you'll change `maximumValue`.
-    @IBInspectable public var minimumValue: Double = 0.0
+    @IBInspectable public var minimumValue: Double = 0.0 {
+        didSet {
+            if value < minimumValue {
+                value = minimumValue
+                
+                if maximumValue < minimumValue {
+                    maximumValue = minimumValue
+                }
+            }
+        }
+    }
     
     /// The upper bound of the slider's range. Default is `1.0`.
     ///
     /// Use this property to get and set the slider's accpetable range's upper bound.
     /// - Note: The value may change if you'll change `minimumValue`.
-    @IBInspectable public var maximumValue: Double = 1.0
+    @IBInspectable public var maximumValue: Double = 1.0 {
+        didSet {
+            if value > maximumValue {
+                value = maximumValue
+                
+                if minimumValue > maximumValue {
+                    minimumValue = maximumValue
+                }
+            }
+        }
+    }
     
     /// A number of segments in each section. Default is `4`.
     @IBInspectable public var segmentCount: UInt = 4 { didSet { updateAppearance() } }
@@ -102,6 +132,7 @@ import os.log
     
     private var separatorLineSpaceWidth: CGFloat = 4.0
     private var wasLastTouchInside = true
+    private var shouldUpdateValue = true
     
     /// By some reasons after `layoutSubviews()` is called, `contentView`'s size is still undefined, so I moved the
     /// content size-dependent code here.
@@ -122,7 +153,7 @@ import os.log
         let offset = CGPoint(x: -scrollView.contentInset.left + (gelf.valueProgress * scrollView.contentSize.width), y: 0.0)
         
         os_log("Setting: %@", type: .debug, "\(offset)")
-        scrollView.contentOffset = offset
+        gelf.performWithoutUpdatingValue { scrollView.contentOffset = offset }
     }
     
     // MARK: - Methods
@@ -189,7 +220,7 @@ import os.log
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        scrollView.contentInset = UIEdgeInsets(top: 0.0, left: bounds.width / 2.0, bottom: 0.0, right: bounds.width / 2.0)
+        performWithoutUpdatingValue { scrollView.contentInset = UIEdgeInsets(top: 0.0, left: bounds.width / 2.0, bottom: 0.0, right: bounds.width / 2.0) }
 
         indicatorLayer.bounds = CGRect(x: 0.0, y: 0.0, width: separatorLineWidth, height: layer.bounds.height)
         indicatorLayer.position = CGPoint(x: layer.bounds.midX, y: layer.bounds.midY)
@@ -271,6 +302,12 @@ import os.log
         // TODO:
     }
     
+    private func performWithoutUpdatingValue(_ action: () -> Void) {
+        shouldUpdateValue = false
+        action()
+        shouldUpdateValue = true
+    }
+    
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         // TODO: Need to make the tracking methods call in order to support `UIControl` actions.
         return super.beginTracking(touch, with: event)
@@ -322,6 +359,14 @@ private typealias ScrollDelegate = SegmentedSlider
 extension ScrollDelegate: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         os_log("Setted: %@", type: .debug, "\(scrollView.contentOffset)") // BUG: the value doesn't match with the setted one.
-        let progress = (scrollView.contentOffset.x + scrollView.contentInset.left) / scrollView.contentSize.width
+        let progress = Double((scrollView.contentOffset.x + scrollView.contentInset.left) / scrollView.contentSize.width)
+        os_log("Progress: %@", type: .debug, "\(progress)")
+        
+        guard shouldUpdateValue else { return }
+        
+        let newValue = min(1.0, max(0.0, progress)) * (maximumValue - minimumValue)
+        guard newValue != actualValue else { return }
+        actualValue = newValue
+        sendActions(for: [.valueChanged])
     }
 }
