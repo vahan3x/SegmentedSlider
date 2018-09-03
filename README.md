@@ -1,4 +1,7 @@
 # SegmentedSlider
+
+`SegmentedSlider` is a fully customizable, dial-like UI element to pick a single value from a continuous range of values. It uses `CoreAnimation` to provide maximum performance with minimum **GPU**/**CPU** and battery usage.
+
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?longCache=true&style=flat)](https://github.com/vahan3x/SegmentedSlider/releases)
 [![Language](https://img.shields.io/badge/language-swift-orange.svg?longCache=true&style=flat)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat)](https://github.com/vahan3x/SegmentedSlider/blob/master/LICENSE?raw=true)
@@ -19,6 +22,14 @@ _____
 ## Example
 
 To run the example project, clone the repo, and open `SegmentedSlider.xcworkspace` from the root directory.
+
+### Screenshots
+
+<img src="Resources/ss1.png" height="521px">&nbsp;
+<img src="Resources/ss1-1.png" height="521px">
+<img src="Resources/ss2.png" height="521px">&nbsp;
+<img src="Resources/ss2-2.png" height="521px">
+
 
 ## Requirements
 
