@@ -45,7 +45,10 @@ import os.log
     
     private var actualValue: Double = 0.5
     
-    private var valueProgress: CGFloat { return CGFloat(actualValue / (maximumValue - minimumValue)) }
+    private var valueProgress: CGFloat {
+        guard maximumValue != minimumValue else { return 0.0 }
+        return CGFloat(actualValue / (maximumValue - minimumValue))
+    }
     
     /// The lower bound of the slider's range. Default is `0.0`.
     ///
@@ -122,6 +125,19 @@ import os.log
             updateAppearance()
         }
     }
+    
+    /// A Boolean value indicating whether the slider is currently tracking touch events.
+    ///
+    /// While tracking of a touch event is in progress, the slider sets the value of this property
+    /// to `true`. When tracking ends or is cancelled for any reason, it sets this property to `false`.
+    public override var isTracking: Bool { return super.isTracking || scrollView.panGestureRecognizer.state != .possible }
+    
+    /// A Boolean value indicating whether a tracked touch event is currently inside the slider’s bounds.
+    ///
+    /// While tracking of a touch event is ongoing, the slider updates the value of this property to indicate
+    /// whether the most recent touch is still inside the slider’s bounds. The slider uses this information to trigger
+    /// specific events. For example, touch events entering or exiting a slider trigger appropriate drag events.
+    public override var isTouchInside: Bool { return super.isTouchInside || (scrollView.panGestureRecognizer.state != .possible && wasLastTouchInside) }
     
     private let replicatorLayer = CAReplicatorLayer()
     private let imageLayer = CALayer()
@@ -300,6 +316,7 @@ import os.log
     /// Default is `true`.
     public func set(value: Double, animated: Bool = true) {
         // TODO:
+        fatalError("Not implemented.")
     }
     
     private func performWithoutUpdatingValue(_ action: () -> Void) {
