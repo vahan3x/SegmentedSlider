@@ -31,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		268BDA2E21555B57009A292F /* SegmentedSlider.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SegmentedSlider.podspec; path = ../SegmentedSlider.podspec; sourceTree = "<group>"; };
 		26D2F78F213AA17C00B0EFA9 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26D2F792213AA17C00B0EFA9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		26D2F794213AA17C00B0EFA9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 			children = (
 				26D2F7AE213C21EA00B0EFA9 /* LICENSE */,
 				26D2F7AF213C21EB00B0EFA9 /* README.md */,
+				268BDA2E21555B57009A292F /* SegmentedSlider.podspec */,
 				26D2F791213AA17C00B0EFA9 /* Sample */,
 				26D2F790213AA17C00B0EFA9 /* Products */,
 				26D2F7A4213AA1E600B0EFA9 /* Frameworks */,
