@@ -56,12 +56,12 @@ import os.log
     /// - Note: The value may change if you'll change `maximumValue`.
     @IBInspectable public var minimumValue: Double = 0.0 {
         didSet {
+            if maximumValue < minimumValue {
+                maximumValue = minimumValue
+            }
+            
             if value < minimumValue {
-                value = minimumValue
-                
-                if maximumValue < minimumValue {
-                    maximumValue = minimumValue
-                }
+                value = minimumValue    
             }
         }
     }
@@ -72,12 +72,12 @@ import os.log
     /// - Note: The value may change if you'll change `minimumValue`.
     @IBInspectable public var maximumValue: Double = 1.0 {
         didSet {
+            if minimumValue > maximumValue {
+                minimumValue = maximumValue
+            }
+            
             if value > maximumValue {
                 value = maximumValue
-                
-                if minimumValue > maximumValue {
-                    minimumValue = maximumValue
-                }
             }
         }
     }
