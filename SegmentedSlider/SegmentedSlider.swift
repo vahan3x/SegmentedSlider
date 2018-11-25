@@ -43,7 +43,7 @@ import os.log
     
     private var valueProgress: CGFloat {
         guard maximumValue != minimumValue else { return 0.0 }
-        return CGFloat(actualValue / (maximumValue - minimumValue))
+        return CGFloat((actualValue - minimumValue) / (maximumValue - minimumValue))
     }
     
     /// The lower bound of the slider's range. Default is `0.0`.
