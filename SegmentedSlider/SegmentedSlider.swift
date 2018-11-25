@@ -145,6 +145,12 @@ import os.log
     /// specific events. For example, touch events entering or exiting a slider trigger appropriate drag events.
     public override var isTouchInside: Bool { return super.isTouchInside || (scrollView.panGestureRecognizer.state != .possible && wasLastTouchInside) }
     
+    /// A Boolean value indicating whether the slider is still decelerating after the last slide.
+    ///
+    /// After the touch was released the slider may bounce with deceleration, in that case it sets this property to `true`
+    /// until the deceleration is over.
+    public private(set) var isDecelerating: Bool = false
+    
     public override var intrinsicContentSize: CGSize { return CGSize(width: UIView.noIntrinsicMetric, height: 30.0) }
     
     private let scrollView = UIScrollView()
@@ -346,4 +352,8 @@ extension ScrollDelegate: UIScrollViewDelegate {
         actualValue = newValue
         sendActions(for: [.valueChanged])
     }
+    
+    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) { isDecelerating = true }
+    
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { isDecelerating = false }
 }
