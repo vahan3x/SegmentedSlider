@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     
     @IBOutlet private weak var segmentedSlider: SegmentedSlider!
     @IBOutlet private weak var stepper: UIStepper!
+    @IBOutlet private weak var label: UILabel!
     
     // MARK: - Methods
     
@@ -30,6 +31,7 @@ class ViewController: UIViewController {
     
     @IBAction func sliderAction(_ sender: SegmentedSlider) {
         stepper.value = sender.value
+        label.text = "\(sender.value)"
         print("Slider Value changed: \(sender.value)")
     }
 }

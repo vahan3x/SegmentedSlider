@@ -2,10 +2,10 @@
 
 `SegmentedSlider` is a fully customizable, dial-like UI element to pick a single value from a continuous range of values. It uses `CoreAnimation` to provide maximum performance with minimum **GPU**/**CPU** and battery usage.
 
-[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg?longCache=true&style=flat)](https://github.com/vahan3x/SegmentedSlider/releases)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue.svg?longCache=true&style=flat)](https://github.com/vahan3x/SegmentedSlider/releases)
 [![Language](https://img.shields.io/badge/language-swift-orange.svg?longCache=true&style=flat)](https://swift.org)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat)](https://github.com/vahan3x/SegmentedSlider/blob/master/LICENSE?raw=true)
-[![CocoaPods](https://img.shields.io/badge/pod-v1.1.1-orange.svg?longCache=true&style=flat)](https://cocoapods.org/pods/SegmentedSlider)
+[![CocoaPods](https://img.shields.io/badge/pod-v1.2.1-orange.svg?longCache=true&style=flat)](https://cocoapods.org/pods/SegmentedSlider)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 _____
 
@@ -57,7 +57,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-pod 'SegmentedSlider', '~> 1.1.1'
+pod 'SegmentedSlider', '~> 1.2.1'
 end
 ```
 
@@ -81,7 +81,7 @@ $ brew install carthage
 To integrate SegmentedSlider into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "vahan3x/SegmentedSlider" ~> 1.1.1
+github "vahan3x/SegmentedSlider" ~> 1.2.1
 ```
 
 Run `carthage update` to build the framework and drag the built `SegmentedSlider.framework` into your Xcode project.

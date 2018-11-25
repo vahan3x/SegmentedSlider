@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.9"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,46 +20,67 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gCp-dk-m7j" customClass="SegmentedSlider" customModule="SegmentedSlider">
                                 <rect key="frame" x="0.0" y="637" width="375" height="30"/>
-                                <color key="tintColor" cyan="0.033002056706119588" magenta="1" yellow="1" black="0.0" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="separatorLineHeightDifference">
-                                        <real key="value" value="0.0"/>
+                                        <real key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="separatorLineWidth">
-                                        <real key="value" value="6"/>
+                                        <real key="value" value="12"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="segmentColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="sectionWidth">
-                                        <real key="value" value="75"/>
+                                        <real key="value" value="46"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="sectionCount">
                                         <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="segmentCount">
+                                        <integer key="value" value="7"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maximumValue">
+                                        <real key="value" value="150"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="value">
+                                        <real key="value" value="75"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="minimumValue">
+                                        <real key="value" value="0.0"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="sliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Riz-vp-erp"/>
                                 </connections>
                             </view>
-                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" maximumValue="1" stepValue="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="6jK-LZ-fa7">
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="75" maximumValue="150" translatesAutoresizingMaskIntoConstraints="NO" id="6jK-LZ-fa7">
                                 <rect key="frame" x="16" y="600" width="94" height="29"/>
                                 <connections>
                                     <action selector="stepperAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="qaN-sa-3nR"/>
                                 </connections>
                             </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="75.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HJZ-Hd-gRa">
+                                <rect key="frame" x="326" y="604" width="33" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cyan="0.033002056709999998" magenta="1" yellow="1" black="0.0" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HJZ-Hd-gRa" secondAttribute="trailing" constant="16" id="5iZ-S1-CaX"/>
                             <constraint firstItem="gCp-dk-m7j" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="BQK-OC-eQr"/>
+                            <constraint firstItem="HJZ-Hd-gRa" firstAttribute="centerY" secondItem="6jK-LZ-fa7" secondAttribute="centerY" id="LRT-tq-IJh"/>
                             <constraint firstItem="gCp-dk-m7j" firstAttribute="top" secondItem="6jK-LZ-fa7" secondAttribute="bottom" constant="8" id="PLi-kH-Wze"/>
                             <constraint firstItem="gCp-dk-m7j" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="UkL-c5-oyX"/>
+                            <constraint firstItem="HJZ-Hd-gRa" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6jK-LZ-fa7" secondAttribute="trailing" constant="16" id="f9X-dj-nBT"/>
                             <constraint firstItem="6jK-LZ-fa7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="gIl-VR-qXn"/>
                             <constraint firstItem="gCp-dk-m7j" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="qJR-Rg-X2y"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="label" destination="HJZ-Hd-gRa" id="iFJ-5n-wiI"/>
                         <outlet property="segmentedSlider" destination="gCp-dk-m7j" id="w0P-mb-N86"/>
                         <outlet property="stepper" destination="6jK-LZ-fa7" id="lfP-0B-T1o"/>
                     </connections>

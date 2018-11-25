@@ -34,12 +34,8 @@ import os.log
             guard value != actualValue else { return }
             
             actualValue = value
-
-            let offset = CGPoint(x: -scrollView.contentInset.left + (valueProgress * scrollView.contentSize.width), y: 0.0)
             
-//            os_log("Setting: %@", type: .debug, "\(offset)")
-            
-            performWithoutUpdatingValue { scrollView.contentOffset = offset }
+            performWithoutUpdatingValue { updateScrollViewOffset() }
         }
     }
     
@@ -83,46 +79,56 @@ import os.log
     }
     
     /// A number of segments in each section. Default is `4`.
-    @IBInspectable public var segmentCount: UInt = 4 { didSet { updateAppearance() } }
+    @IBInspectable public var segmentCount: UInt {
+        set { segmentReplicatorView.segmentCount = newValue }
+        get { return segmentReplicatorView.segmentCount }
+    }
     
     /// A color of the segment separators. Default is `.white`.
-    @IBInspectable public var segmentColor: UIColor = .white { didSet { replicatorLayer.instanceColor = segmentColor.cgColor } }
+    @IBInspectable public var segmentColor: UIColor {
+        set { segmentReplicatorView.segmentColor = newValue }
+        get { return segmentReplicatorView.segmentColor }}
     
     /// A number of sections to divide the slider's range into. Default is `1`.
-    @IBInspectable public var sectionCount: UInt = 1 { didSet { updateAppearance() } }
+    @IBInspectable public var sectionCount: UInt {
+        set { segmentReplicatorView.sectionCount = newValue }
+        get { return segmentReplicatorView.sectionCount }
+    }
     
     /// Width of the slider's single section in points. Default is `0.0`.
     ///
     /// Use this property to customize sensitivity of the slider.
     /// - Note: Values less then a minimum width needed to separate section segments will be ignored.
-    @IBInspectable public var sectionWidth: CGFloat = 0.0 { didSet { updateAppearance() } }
+    @IBInspectable public var sectionWidth: CGFloat {
+        set { segmentReplicatorView.sectionWidth = newValue }
+        get { return segmentReplicatorView.sectionWidth }
+    }
     
     /// Width of the slider's section and segment separator lines in points. Default is `2.0`.
     ///
     /// Use this property to customize the slider's appearance.
     /// - Note: Values less then `1.0` will be ignored.
-    @IBInspectable public var separatorLineWidth: CGFloat = 2.0 {
-        didSet {
-            if separatorLineWidth < 1.0 { separatorLineWidth = 1.0 }
-            
-            guard separatorLineHeightDifference >= -separatorLineWidth else {
-                separatorLineHeightDifference = -separatorLineWidth // The setter will call `updateAppearance()`
-                return
-            }
-            
-            updateAppearance()
+    @IBInspectable public var separatorLineWidth: CGFloat {
+        set {
+            segmentReplicatorView.separatorLineWidth = newValue
+            updateIndiciatorLayer()
         }
+        get { return segmentReplicatorView.separatorLineWidth }
     }
     
     /// Height difference of the section and segment separator lines in points. default is `0.0`.
     ///
     /// Use this property to customize the slider's appearance.
     /// - Note: Values less then `-separatorLineWidth` will be ignored.
-    @IBInspectable public var separatorLineHeightDifference: CGFloat = 0.0 {
+    @IBInspectable public var separatorLineHeightDifference: CGFloat {
+        set { segmentReplicatorView.separatorLineHeightDifference = newValue }
+        get { return segmentReplicatorView.separatorLineHeightDifference }
+    }
+    
+    @IBInspectable public override var isEnabled: Bool {
         didSet {
-            if separatorLineHeightDifference < -separatorLineWidth { separatorLineHeightDifference = -separatorLineWidth }
-            
-            updateAppearance()
+            scrollView.isScrollEnabled = isEnabled
+            scrollView.alpha = isEnabled ? 1.0 : 0.75
         }
     }
     
@@ -139,37 +145,20 @@ import os.log
     /// specific events. For example, touch events entering or exiting a slider trigger appropriate drag events.
     public override var isTouchInside: Bool { return super.isTouchInside || (scrollView.panGestureRecognizer.state != .possible && wasLastTouchInside) }
     
-    private let replicatorLayer = CAReplicatorLayer()
-    private let imageLayer = CALayer()
+    public override var intrinsicContentSize: CGSize { return CGSize(width: UIView.noIntrinsicMetric, height: 30.0) }
+    
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private var contentViewWidthConstraint: NSLayoutConstraint!
-    private var indicatorLayer = CALayer()
+    private let indicatorLayer = CALayer()
+    private let segmentReplicatorView = SegmentReplicatorView()
     
     private var separatorLineSpaceWidth: CGFloat = 4.0
     private var wasLastTouchInside = true
     private var shouldUpdateValue = true
     
-    /// By some reasons after `layoutSubviews()` is called, `contentView`'s size is still undefined, so I moved the
-    /// content size-dependent code here.
-    private lazy var scrollViewContentObservation = scrollView.observe(\.contentSize) { [weak self] (scrollView, change) in
-        guard let gelf = self else { return }
+    private lazy var contentSizeObservation = scrollView.observe(\.contentSize, options: [.new]) { [weak self] (scrollView, change) in
+        guard let self = self else { return }
         
-        gelf.replicatorLayer.bounds = CGRect(x: gelf.replicatorLayer.bounds.origin.x,
-                                             y: gelf.replicatorLayer.bounds.origin.y,
-                                             width: gelf.replicatorLayer.bounds.width,
-                                             height: scrollView.contentSize.height)
-        gelf.replicatorLayer.position = CGPoint(x: scrollView.contentSize.width / 2.0 - gelf.separatorLineWidth / 2.0,
-                                                y: scrollView.contentSize.height / 2.0)
-        gelf.imageLayer.frame = CGRect(x: 0.0, y: 0.0,
-                                       width: gelf.imageLayer.bounds.width,
-                                       height: gelf.replicatorLayer.bounds.height)
-        
-        
-        let offset = CGPoint(x: -scrollView.contentInset.left + (gelf.valueProgress * scrollView.contentSize.width), y: 0.0)
-        
-//        os_log("Setting: %@", type: .debug, "\(offset)")
-        gelf.performWithoutUpdatingValue { scrollView.contentOffset = offset }
+        self.performWithoutUpdatingValue { self.updateScrollViewOffset() }
     }
     
     // MARK: - Methods
@@ -177,6 +166,7 @@ import os.log
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
+        
     }
     
     public override init(frame: CGRect) {
@@ -186,35 +176,32 @@ import os.log
     
     public override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
+        
         if backgroundColor == nil {
             backgroundColor = .clear
         }
     }
     
     private func setup() {
-        _ = scrollViewContentObservation
         backgroundColor = .clear
-        
-        contentView.backgroundColor = .clear
-        contentView.layer.addSublayer(replicatorLayer)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         scrollView.panGestureRecognizer.addTarget(self, action: #selector(scrollViewPanAction(_:)))
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.alwaysBounceHorizontal = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
+        scrollView.clipsToBounds = true
+        segmentReplicatorView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(segmentReplicatorView)
         addSubview(scrollView)
         scrollView.delegate = self
-        contentViewWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: 0.0)
+        
         NSLayoutConstraint.activate([
-            contentView.heightAnchor.constraint(equalTo: heightAnchor),
-            contentViewWidthConstraint,
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            segmentReplicatorView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            segmentReplicatorView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            segmentReplicatorView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            segmentReplicatorView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            segmentReplicatorView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             
             scrollView.centerXAnchor.constraint(equalTo: centerXAnchor),
             scrollView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -222,90 +209,63 @@ import os.log
             scrollView.heightAnchor.constraint(equalTo: heightAnchor)
         ])
         
-        replicatorLayer.addSublayer(imageLayer)
-        
         indicatorLayer.mask = CALayer()
+        indicatorLayer.contentsScale = UIScreen.main.scale
+        indicatorLayer.mask?.contentsScale = UIScreen.main.scale
         indicatorLayer.backgroundColor = tintColor.cgColor
         layer.addSublayer(indicatorLayer)
         
-        updateAppearance()
+        _ = contentSizeObservation
     }
-    
-    public override var intrinsicContentSize: CGSize { return CGSize(width: UIView.noIntrinsicMetric, height: 30.0) }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        performWithoutUpdatingValue { scrollView.contentInset = UIEdgeInsets(top: 0.0, left: bounds.width / 2.0, bottom: 0.0, right: bounds.width / 2.0) }
-
-        indicatorLayer.bounds = CGRect(x: 0.0, y: 0.0, width: separatorLineWidth, height: layer.bounds.height)
-        indicatorLayer.position = CGPoint(x: layer.bounds.midX, y: layer.bounds.midY)
-        indicatorLayer.mask?.frame = indicatorLayer.bounds
+        performWithoutUpdatingValue {
+            let halfWidth = bounds.width / 2.0
+            guard scrollView.contentInset.left != halfWidth else { return }
+            
+            scrollView.contentInset = UIEdgeInsets(top: 0.0, left: bounds.width / 2.0, bottom: 0.0, right: bounds.width / 2.0)
+            updateScrollViewOffset()
+        }
+        
+        updateIndiciatorLayer()
     }
     
     public override func tintColorDidChange() {
-        super.tintColorDidChange()
         indicatorLayer.backgroundColor = tintColor.cgColor
+        
+        super.tintColorDidChange()
     }
     
-    private func updateAppearance() {
-        // The first one is for a section separator, the seconds are the spaces between the separators and the thirds are for the segment spearators
-        var width = 1.0 * separatorLineWidth + CGFloat(segmentCount) * separatorLineSpaceWidth + CGFloat(segmentCount) * separatorLineWidth
-        if width < sectionWidth {
-            separatorLineSpaceWidth = (sectionWidth - (1.0 * separatorLineWidth + CGFloat(segmentCount) * separatorLineWidth)) / CGFloat(segmentCount)
-            width = sectionWidth
-        }
+    private func updateIndiciatorLayer() {
+        indicatorLayer.bounds = CGRect(x: 0.0, y: 0.0, width: separatorLineWidth, height: layer.bounds.height)
+        indicatorLayer.position = CGPoint(x: layer.bounds.midX, y: layer.bounds.midY)
+        indicatorLayer.mask?.frame = indicatorLayer.bounds
         
         let halfLineWidth = separatorLineWidth / 2.0
         let radius = halfLineWidth
         
-        let segmentHeight = radius + 1.0 + radius
-        let height = radius + separatorLineHeightDifference + segmentHeight + radius
-        
-        let bounds = CGRect(x: 0.0, y: 0.0, width: width, height: height)
-        let image = UIGraphicsImageRenderer(bounds: bounds).image { (context) in
-            UIColor.clear.setFill()
-            context.fill(bounds)
-            
-            UIColor.white.setFill()
-            UIBezierPath(roundedRect: CGRect(x: 0.0, y: 0.0, width: separatorLineWidth, height: height), cornerRadius: CGFloat(radius)).fill()
-            
-            var x = separatorLineWidth
-            let y = (height - segmentHeight) / 2.0
-            UIColor(white: 1.0, alpha: 0.7).setFill()
-            for _ in 0 ..< segmentCount {
-                x += separatorLineSpaceWidth
-                UIBezierPath(roundedRect: CGRect(x: x, y: y, width: separatorLineWidth, height: segmentHeight), cornerRadius: CGFloat(radius)).fill()
-                x += separatorLineWidth
-            }
-        }
+        let segmentHeight = radius + 1.0 + radius + separatorLineHeightDifference
         
         indicatorLayer.mask?.contents = UIGraphicsImageRenderer(bounds: CGRect(x: 0.0, y: 0.0, width: separatorLineWidth, height: segmentHeight)).image { (context) in
             UIColor.white.setFill()
             UIBezierPath(roundedRect: CGRect(x: 0.0, y: 0.0, width: separatorLineWidth, height: segmentHeight), cornerRadius: CGFloat(radius)).fill()
         }.cgImage
-        indicatorLayer.mask?.contentsScale = UIScreen.main.scale
-        indicatorLayer.mask?.contentsCenter = CGRect(x: 0.0, y: radius / segmentHeight, width: 1.0, height: 1.0 / segmentHeight)
         
-        imageLayer.bounds = CGRect(x: imageLayer.bounds.origin.x, y: imageLayer.bounds.origin.y, width: bounds.width, height: imageLayer.bounds.height)
-        imageLayer.contentsScale = UIScreen.main.scale
-        imageLayer.contentsCenter = CGRect(x: 0.0,
-                                           y: CGFloat((height - segmentHeight) / 2.0 + radius) / bounds.height,
-                                           width: 1.0,
-                                           height: 1.0 / bounds.height)
-        imageLayer.contents = image.cgImage
+        let y = (separatorLineHeightDifference / 2.0 + radius) / segmentHeight
+        indicatorLayer.mask?.contentsCenter = CGRect(x: 0.0,
+                                                     y: y,
+                                                     width: 1.0,
+                                                     height: 1.0 - 2 * y)
+    }
+    
+    private func updateScrollViewOffset() {
+        let offset = CGPoint(x: -scrollView.contentInset.left + (self.valueProgress * scrollView.contentSize.width), y: 0.0)
         
-        replicatorLayer.instanceColor = segmentColor.cgColor
-        replicatorLayer.instanceCount = Int(sectionCount) + 2 * Int(UIScreen.main.bounds.width / bounds.width)
-        replicatorLayer.instanceTransform = CATransform3DMakeTranslation(bounds.width + separatorLineSpaceWidth, 0.0, 0.0)
-        replicatorLayer.bounds = CGRect(x: replicatorLayer.bounds.origin.x,
-                                        y: replicatorLayer.bounds.origin.y,
-                                        width: CGFloat(replicatorLayer.instanceCount) * (bounds.width + separatorLineSpaceWidth),
-                                        height: replicatorLayer.bounds.height)
+//        os_log("Setting: %@", type: .debug, "\(offset)")
         
-        contentViewWidthConstraint.constant = (bounds.width + separatorLineSpaceWidth) * CGFloat(sectionCount)
-        
-        scrollView.contentOffset = CGPoint(x: -scrollView.contentInset.left + (valueProgress * scrollView.contentSize.width), y: 0.0)
+        scrollView.contentOffset = offset
     }
     
     /// Set's the slider's current value, optionally animating the transition.

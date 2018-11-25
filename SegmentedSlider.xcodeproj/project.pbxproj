@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		263A4F2D219453C400705012 /* SegmentReplicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263A4F2C219453C400705012 /* SegmentReplicatorView.swift */; };
 		26D2F77D213A88F000B0EFA9 /* SegmentedSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 26D2F77B213A88F000B0EFA9 /* SegmentedSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26D2F785213A892A00B0EFA9 /* SegmentedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D2F784213A892A00B0EFA9 /* SegmentedSlider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		263A4F2C219453C400705012 /* SegmentReplicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReplicatorView.swift; sourceTree = "<group>"; };
 		26D2F778213A88F000B0EFA9 /* SegmentedSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SegmentedSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26D2F77B213A88F000B0EFA9 /* SegmentedSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SegmentedSlider.h; sourceTree = "<group>"; };
 		26D2F77C213A88F000B0EFA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 			children = (
 				26D2F783213A88F800B0EFA9 /* Supporting Files */,
 				26D2F784213A892A00B0EFA9 /* SegmentedSlider.swift */,
+				263A4F2C219453C400705012 /* SegmentReplicatorView.swift */,
 			);
 			path = SegmentedSlider;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26D2F785213A892A00B0EFA9 /* SegmentedSlider.swift in Sources */,
+				263A4F2D219453C400705012 /* SegmentReplicatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
