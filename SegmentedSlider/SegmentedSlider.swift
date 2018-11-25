@@ -341,7 +341,7 @@ extension ScrollDelegate: UIScrollViewDelegate {
         
         guard shouldUpdateValue else { return }
         
-        let newValue = min(1.0, max(0.0, progress)) * (maximumValue - minimumValue)
+        let newValue = minimumValue + min(1.0, max(0.0, progress)) * (maximumValue - minimumValue)
         guard newValue != actualValue else { return }
         actualValue = newValue
         sendActions(for: [.valueChanged])

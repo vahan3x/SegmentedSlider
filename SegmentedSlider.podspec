@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SegmentedSlider'
-  s.version          = '1.2.1'
+  s.version          = '1.2.2'
   s.summary          = 'A customizable control to select a value from continuous range of values.'
   s.description      = <<-DESC
 SegmentedSlider is a customizable slider that renders it's range as a sequence of sections divided into segments. 
