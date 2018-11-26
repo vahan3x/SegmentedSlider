@@ -11,7 +11,8 @@ import os.log
 
 /// A control to select a single value from continuous range of values.
 /// Designed to display the range as a sequence of sections divided into segments.
-/// - BUG: `UIControl`'s tracking behaviour is currently not working.
+/// - BUG: On iPhone X and XS devices the slider is not able to stop on minimum and/or
+/// maximum values because of `UIScrollView`'s strange behaviour on that devices.
 @IBDesignable public class SegmentedSlider: UIControl {
     
     // MARK: - Variables
@@ -80,7 +81,13 @@ import os.log
     
     /// A number of segments in each section. Default is `4`.
     @IBInspectable public var segmentCount: UInt {
-        set { segmentReplicatorView.segmentCount = newValue }
+        set {
+            segmentReplicatorView.segmentCount = newValue
+            performWithoutUpdatingValue {
+                layoutIfNeeded()
+                updateScrollViewOffset()
+            }
+        }
         get { return segmentReplicatorView.segmentCount }
     }
     
@@ -91,7 +98,13 @@ import os.log
     
     /// A number of sections to divide the slider's range into. Default is `1`.
     @IBInspectable public var sectionCount: UInt {
-        set { segmentReplicatorView.sectionCount = newValue }
+        set {
+            segmentReplicatorView.sectionCount = newValue
+            performWithoutUpdatingValue {
+                layoutIfNeeded()
+                updateScrollViewOffset()
+            }
+        }
         get { return segmentReplicatorView.sectionCount }
     }
     
@@ -100,7 +113,13 @@ import os.log
     /// Use this property to customize sensitivity of the slider.
     /// - Note: Values less then a minimum width needed to separate section segments will be ignored.
     @IBInspectable public var sectionWidth: CGFloat {
-        set { segmentReplicatorView.sectionWidth = newValue }
+        set {
+            segmentReplicatorView.sectionWidth = newValue
+            performWithoutUpdatingValue {
+                layoutIfNeeded()
+                updateScrollViewOffset()
+            }
+        }
         get { return segmentReplicatorView.sectionWidth }
     }
     
@@ -112,6 +131,10 @@ import os.log
         set {
             segmentReplicatorView.separatorLineWidth = newValue
             updateIndiciatorLayer()
+            performWithoutUpdatingValue {
+                layoutIfNeeded()
+                updateScrollViewOffset()
+            }
         }
         get { return segmentReplicatorView.separatorLineWidth }
     }
